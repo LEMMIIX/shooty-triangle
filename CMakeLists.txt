@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.30)
+
+project(shooty_triangle)
+
+add_executable(shooty_triangle
+	src/main.c
+	src/controller.c
+	src/player.c)
+
+find_package(SDL3 CONFIG REQUIRED)
+find_package(SDL3_ttf CONFIG REQUIRED)
+
+target_link_libraries(shooty_triangle PRIVATE 
+	SDL3::SDL3-static
+	SDL3_ttf::SDL3_ttf-static
+)
