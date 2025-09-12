@@ -66,10 +66,17 @@ int main() {
 				printf("quit event hit\n");
 				quit = true;
 			} else {
-				//printf("getting mouse state...\n");
-				SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y);
-				//printf("turning the thing\n");
-				turn_the_thing(&mouse_pos_x, &mouse_pos_y, ship);
+				switch (event.type) {
+					case SDL_EVENT_MOUSE_MOTION:
+						//printf("getting mouse state...\n");
+						SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y);
+						//printf("turning the thing\n");
+						turn_the_thing(&mouse_pos_x, &mouse_pos_y, ship);
+						break;
+					default:
+						printf("unhandled event");
+						break;
+				}
 			}
 		}
 
