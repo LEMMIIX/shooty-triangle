@@ -4,9 +4,17 @@
 #include "SDL3/SDL_rect.h"
 
 #include "SDL3/SDL_render.h"
+#include "c_map.h"
 #include "common.h"
 #include "player.h"
 #include "controller.h"
+
+struct map_uint_bool key_state[] = {
+	{SDLK_W, 0},
+	{SDLK_A, 0},
+	{SDLK_S, 0},
+	{SDLK_D, 0},
+};
 
 float move_the_thing(SDL_Event event, SDL_Vertex obj[]) { return 0; }
 
@@ -17,7 +25,8 @@ void turn_the_thing(float* mouse_x, float* mouse_y, SDL_Vertex *obj) {
 	float vector_y = *mouse_y - center_y;
 
 	float rotation_angle = atan2f(vector_y, vector_x);
-	printf("rotation_angle = %f radians (%f degrees)\n", rotation_angle, rotation_angle * 180.0f / M_PI);
+	//printf("\rrotation_angle = %f radians (%f degrees)", rotation_angle, rotation_angle * 180.0f / M_PI);
+	fflush(stdout);
 	for (int i = 0; i < 3; ++i) {
 		float x = reference_triangle[i].position.x - center_x;
 		float y = reference_triangle[i].position.y - center_y;
@@ -33,4 +42,56 @@ void turn_the_thing(float* mouse_x, float* mouse_y, SDL_Vertex *obj) {
 	}
 	//printf("mouse_x position = %f, ", *mouse_x);
 	//printf("mouse_y position = %f\n", *mouse_y);
+}
+
+void move_up(SDL_Vertex* obj, float movement_speed) {
+	obj[0].position.y -= movement_speed;
+	obj[1].position.y -= movement_speed;
+	obj[2].position.y -= movement_speed;
+}
+void move_left(SDL_Vertex* obj, float movement_speed) {
+	obj[0].position.x -= movement_speed;
+	obj[1].position.x -= movement_speed;
+	obj[2].position.x -= movement_speed;
+}
+void move_down(SDL_Vertex* obj, float movement_speed) {
+	obj[0].position.y += movement_speed;
+	obj[1].position.y += movement_speed;
+	obj[2].position.y += movement_speed;
+}
+void move_right(SDL_Vertex* obj, float movement_speed) {
+	obj[0].position.x += movement_speed;
+	obj[1].position.x += movement_speed;
+	obj[2].position.x += movement_speed;
+}
+
+void set_key_active(unsigned int key) {
+	const unsigned int size = sizeof(key_state) / sizeof(key_state[0]);
+	for (int i = 0; i < size; ++i) {
+		if (key == key_state[i].key) {
+			key_state[i].active = 1;
+		}
+	}
+}
+
+void set_key_inactive(unsigned int key) {
+	const unsigned int size = sizeof(key_state) / sizeof(key_state[0]);
+	for (int i = 0; i < size; ++i) {
+		if (key == key_state[i].key) {
+			key_state[i].active = 0;
+		}
+	}
+}
+
+bool is_key_active(unsigned int key) {
+	bool is_active = false;
+	
+	const unsigned int size = sizeof(key_state) / sizeof(key_state[0]);
+	for (int i = 0; i < size; ++i) {
+		if (key == key_state[i].key) {
+			is_active = key_state[i].active;
+		}
+	}
+
+	return is_active;
 }

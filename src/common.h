@@ -27,4 +27,8 @@ static const char* signature = R"(
 
 )";
 
+
+// library definition
+#include "c_map.h"
+
 #endif
