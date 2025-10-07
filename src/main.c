@@ -78,7 +78,7 @@ int main() {
 	float mouse_pos_x;
 	float mouse_pos_y;
 
-	float movement_speed = 0.02f;
+	float movement_speed = 200.0f;
 
 	const char* controls ="W - move UP\nA - move LEFT\nS - move DOWN\nD - move RIGHT\nMOUSE - rotate\n";
 	
@@ -86,7 +86,10 @@ int main() {
 	Uint64 frame_count = 0;
 	Uint64 current_tick;
 	float frames_per_second = 0.0f;
-	char frames_string[100];
+	char frames_string[100] = "0.000";
+
+	Uint64 last_delta_tick = SDL_GetTicks();
+	float delta_time = 0;
 
 	bool quit = false;
 	SDL_Event event;
@@ -110,20 +113,20 @@ int main() {
 		}
 
 		if (is_key_active(SDLK_W)) {
-			move_up(ship, movement_speed);
-			move_up(reference_triangle, movement_speed);
+			move_up(ship, movement_speed * delta_time);
+			move_up(reference_triangle, movement_speed * delta_time);
 		}
 		if (is_key_active(SDLK_A)) {
-			move_left(ship, movement_speed);
-			move_left(reference_triangle, movement_speed);
+			move_left(ship, movement_speed * delta_time);
+			move_left(reference_triangle, movement_speed * delta_time);
 		}
 		if (is_key_active(SDLK_S)) {
-			move_down(ship, movement_speed);
-			move_down(reference_triangle, movement_speed);
+			move_down(ship, movement_speed * delta_time);
+			move_down(reference_triangle, movement_speed * delta_time);
 		}
 		if (is_key_active(SDLK_D)) {
-			move_right(ship, movement_speed);
-			move_right(reference_triangle, movement_speed);
+			move_right(ship, movement_speed * delta_time);
+			move_right(reference_triangle, movement_speed * delta_time);
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -133,18 +136,25 @@ int main() {
 
 		print_text_to_screen(controls, 0, 0, renderer);
 
+		//fps count
 		++frame_count;
 		current_tick = SDL_GetTicks();
 		if (current_tick - last_tick >= 1000) {
 			frames_per_second = frame_count * 1000.0f / (current_tick - last_tick);
-			snprintf(frames_string, 99, "%f", frames_per_second);
+			snprintf(frames_string, 99, "%.3f", frames_per_second);
 
 			frame_count = 0;
 			last_tick = current_tick;
 		}
 		print_text_to_screen(frames_string, WINDOW_WIDTH / 2, 0, renderer);
 
+
 		SDL_RenderPresent(renderer);
+
+
+		// delta calculation
+		delta_time = (current_tick - last_delta_tick) / 1000.0f;
+		last_delta_tick = current_tick;
 	}
 
 	printf("ending program\n");
