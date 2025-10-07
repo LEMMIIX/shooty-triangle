@@ -3,6 +3,8 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_mouse.h"
 #include "SDL3/SDL_render.h"
+#include "SDL3/SDL_stdinc.h"
+#include "SDL3/SDL_timer.h"
 #include "SDL3/SDL_video.h"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -23,7 +25,7 @@
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 
-static bool vsync_enabled = 0;
+static bool vsync_enabled = 1;
 
 SDL_Vertex reference_triangle[3];
 
@@ -80,9 +82,15 @@ int main() {
 
 	const char* controls ="W - move UP\nA - move LEFT\nS - move DOWN\nD - move RIGHT\nMOUSE - rotate\n";
 	
+	Uint64 last_tick = SDL_GetTicks();
+	Uint64 frame_count = 0;
+	Uint64 current_tick;
+	float frames_per_second = 0.0f;
+	char frames_string[100];
+
 	bool quit = false;
 	SDL_Event event;
-	while (!quit) {
+	while(!quit) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_EVENT_QUIT) {
 				printf("quit event hit\n");
@@ -124,6 +132,17 @@ int main() {
 		SDL_RenderGeometry(renderer, NULL, ship, 3, NULL, 0);
 
 		print_text_to_screen(controls, 0, 0, renderer);
+
+		++frame_count;
+		current_tick = SDL_GetTicks();
+		if (current_tick - last_tick >= 1000) {
+			frames_per_second = frame_count * 1000.0f / (current_tick - last_tick);
+			snprintf(frames_string, 99, "%f", frames_per_second);
+
+			frame_count = 0;
+			last_tick = current_tick;
+		}
+		print_text_to_screen(frames_string, WINDOW_WIDTH / 2, 0, renderer);
 
 		SDL_RenderPresent(renderer);
 	}
