@@ -22,6 +22,8 @@
 #include "player.h"
 #include "font_and_text.h"
 
+float delta_time = 0;
+
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 
@@ -89,7 +91,6 @@ int main() {
 	char frames_string[100] = "0.000";
 
 	Uint64 last_delta_tick = SDL_GetTicks();
-	float delta_time = 0;
 
 	bool quit = false;
 	SDL_Event event;

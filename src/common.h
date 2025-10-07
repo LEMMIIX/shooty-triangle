@@ -27,6 +27,7 @@ static const char* signature = R"(
 
 
 )";
+extern float delta_time;
 
 
 // library definition
