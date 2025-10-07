@@ -3,6 +3,7 @@
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
+#define FONT "terminal-f4.ttf"
 
 static const char* signature = R"(
                                                   

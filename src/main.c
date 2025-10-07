@@ -2,16 +2,12 @@
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_mouse.h"
-#include "SDL3/SDL_oldnames.h"
 #include "SDL3/SDL_render.h"
-#include "SDL3/SDL_stdinc.h"
-#include "SDL3/SDL_timer.h"
 #include "SDL3/SDL_video.h"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <math.h>
 #include <stdio.h>
-#include <string.h>
 
 #ifdef _WIN32
 	#include <windows.h>
@@ -22,10 +18,12 @@
 #include "common.h"
 #include "controller.h"
 #include "player.h"
+#include "font_and_text.h"
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 
+static bool vsync_enabled = 0;
 
 SDL_Vertex reference_triangle[3];
 
@@ -53,6 +51,18 @@ int main() {
 		printf("hello window and renderer\n");
 	}
 
+	if (!SDL_SetRenderVSync(renderer, vsync_enabled)) {
+		printf("VSync could not be enabled, error: %s", SDL_GetError());
+		return SDL_APP_FAILURE;
+	}
+
+	if (!font_init()) {
+		printf("font %s not found\n", FONT);
+		return SDL_APP_FAILURE;
+	} else {
+		printf("using font: %s\n", FONT);
+	}
+
 	printf("creating ship\n");
 	SDL_Vertex ship[3];
 	create_player(ship);
@@ -68,6 +78,8 @@ int main() {
 
 	float movement_speed = 0.02f;
 
+	const char* controls ="W - move UP\nA - move LEFT\nS - move DOWN\nD - move RIGHT\nMOUSE - rotate\n";
+	
 	bool quit = false;
 	SDL_Event event;
 	while (!quit) {
@@ -111,12 +123,15 @@ int main() {
 
 		SDL_RenderGeometry(renderer, NULL, ship, 3, NULL, 0);
 
+		print_text_to_screen(controls, 0, 0, renderer);
+
 		SDL_RenderPresent(renderer);
 	}
 
 	printf("ending program\n");
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	kill_font();
 	SDL_Quit();
 	return 0;
 }

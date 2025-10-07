@@ -5,7 +5,10 @@ project(shooty_triangle)
 add_executable(shooty_triangle
 	src/main.c
 	src/controller.c
-	src/player.c)
+	src/player.c
+	src/c_map.c
+	src/font_and_text.c
+	)
 
 find_package(SDL3 CONFIG REQUIRED)
 find_package(SDL3_ttf CONFIG REQUIRED)
