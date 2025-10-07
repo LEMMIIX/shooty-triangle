@@ -8,6 +8,8 @@
 
 extern SDL_Vertex reference_triangle[];
 extern struct map_uint_bool key_state[];
+extern float center_x;
+extern float center_y;
 
 void turn_the_thing(float* x, float* y, SDL_Vertex obj[]);
 float move_the_thing(SDL_Event event, SDL_Vertex obj[]);
