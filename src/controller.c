@@ -14,8 +14,8 @@ struct map_uint_bool key_state[] = {
 	{SDLK_D, 0},
 };
 
-float center_x = 0.0f;
-float center_y = 0.0f;
+float center_x = WINDOW_WIDTH / 2.0f;
+float center_y = WINDOW_HEIGHT / 2.0f;
 
 float move_the_thing(SDL_Event event, SDL_Vertex obj[]) { return 0; }
 
