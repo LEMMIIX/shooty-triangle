@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include "SDL3/SDL_render.h"
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 #define FONT "terminal-f4.ttf"
@@ -28,6 +30,8 @@ static const char* signature = R"(
 
 )";
 extern float delta_time;
+extern SDL_Renderer* renderer;
+extern SDL_Window* window;
 
 
 // library definition
