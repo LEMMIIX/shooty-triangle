@@ -29,6 +29,13 @@ Changes:
 ![version4](resources/readme/ship_v4.gif)<br>
 Changes:
 * shoot variations of projectiles with mouse klick
+
 Objective:<br>
 make projectiles shoot from the player towards mouse position,<br>
 create hostile elements<br>
+
+### Version 5:
+
+![version5](resources/readme/ship_v5.gif)<br>
+Changes:
+* shoot projectiles towards mouse
