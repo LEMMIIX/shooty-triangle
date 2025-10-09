@@ -8,10 +8,11 @@
 #include "controller.h"
 
 struct map_uint_bool key_state[] = {
-	{SDLK_W, 0},
-	{SDLK_A, 0},
-	{SDLK_S, 0},
-	{SDLK_D, 0},
+	{SDLK_W, 0},	// move up
+	{SDLK_A, 0},	// move down
+	{SDLK_S, 0},	// move left
+	{SDLK_D, 0},	// move right
+	{SDLK_Q, 0},	// quit
 };
 
 float center_x = WINDOW_WIDTH / 2.0f;
