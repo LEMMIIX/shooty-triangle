@@ -22,3 +22,12 @@ Changes:
 * vsync
 * frame-independent movement using delta time
 * window boundary check for movement
+
+###Version 4:<br>
+
+![version4](resources/readme/ship_v4.gif)<br>
+Changes:
+* shoot variations of projectiles with mouse klick
+Objective:<br>
+make projectiles shoot from the player towards mouse position,<br>
+create hostile elements<br>

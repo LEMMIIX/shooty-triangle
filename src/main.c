@@ -6,6 +6,7 @@
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3/SDL_timer.h"
 #include "SDL3/SDL_video.h"
+#include "ammo.h"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <math.h>
@@ -21,11 +22,12 @@
 #include "controller.h"
 #include "player.h"
 #include "font_and_text.h"
+#include "ammo.h"
 
 float delta_time = 0;
 
-static SDL_Window* window = NULL;
-static SDL_Renderer* renderer = NULL;
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL;
 
 static bool vsync_enabled = 1;
 
@@ -48,7 +50,10 @@ int main() {
 		printf("hello video\n");
 	}
 
-	if (!SDL_CreateWindowAndRenderer("shooty triangle", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer)) {
+	// TODO split up into CreateWindow and CreateRenderer to provide SDL_RendererFlags
+	if (!SDL_CreateWindowAndRenderer("shooty triangle", WINDOW_WIDTH, WINDOW_HEIGHT,
+				SDL_WINDOW_ALWAYS_ON_TOP,
+				&window, &renderer)) {
 		printf("sdl window and renderer creation failed, error: %s", SDL_GetError());
 		return SDL_APP_FAILURE;
 	} else {
@@ -67,6 +72,11 @@ int main() {
 		printf("using font: %s\n", FONT);
 	}
 
+	if (bullets_manager_init() != 0) {
+		printf("bullet manager not initialized\n");
+		return SDL_APP_FAILURE;
+	}
+
 	printf("creating ship\n");
 	SDL_Vertex ship[3];
 	create_player(ship);
@@ -82,7 +92,7 @@ int main() {
 
 	float movement_speed = 200.0f;
 
-	const char* controls ="W - move UP\nA - move LEFT\nS - move DOWN\nD - move RIGHT\nMOUSE - rotate\n";
+	const char* controls ="Q - quit\nW - move UP\nA - move LEFT\nS - move DOWN\nD - move RIGHT\nMOUSE - rotate\nMOUSE [left] - small bullet\nMOUSE [right] - big bullet\n";
 	
 	Uint64 last_tick = SDL_GetTicks();
 	Uint64 frame_count = 0;
@@ -109,7 +119,12 @@ int main() {
 			
 			} else if (event.type == SDL_EVENT_KEY_UP) {
 				set_key_inactive(event.key.key);
-			
+			} else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
+				SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y);
+				create_bullet(mouse_pos_x, mouse_pos_y, BASIC);
+			} else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_RIGHT) {
+				SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y);
+				create_bullet(mouse_pos_x, mouse_pos_y, EXPLOSIVE);
 			}
 		}
 
@@ -129,6 +144,9 @@ int main() {
 			move_right(ship, movement_speed * delta_time);
 			move_right(reference_triangle, movement_speed * delta_time);
 		}
+		if (is_key_active(SDLK_Q)) {
+			quit = true;
+		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
@@ -142,13 +160,14 @@ int main() {
 		current_tick = SDL_GetTicks();
 		if (current_tick - last_tick >= 1000) {
 			frames_per_second = frame_count * 1000.0f / (current_tick - last_tick);
-			snprintf(frames_string, 99, "%.3f", frames_per_second);
+			snprintf(frames_string, 99, "vsync: %i, fps: %.3f", vsync_enabled, frames_per_second);
 
 			frame_count = 0;
 			last_tick = current_tick;
 		}
 		print_text_to_screen(frames_string, WINDOW_WIDTH / 2, 0, renderer);
 
+		update_bullets();
 
 		SDL_RenderPresent(renderer);
 
@@ -163,5 +182,8 @@ int main() {
 	SDL_DestroyWindow(window);
 	kill_font();
 	SDL_Quit();
+
+	free_all_bullets();
+
 	return 0;
 }
