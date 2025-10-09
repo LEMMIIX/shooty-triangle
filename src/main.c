@@ -90,8 +90,6 @@ int main() {
 	float mouse_pos_x;
 	float mouse_pos_y;
 
-	float movement_speed = 200.0f;
-
 	const char* controls ="Q - quit\nW - move UP\nA - move LEFT\nS - move DOWN\nD - move RIGHT\nMOUSE - rotate\nMOUSE [left] - small bullet\nMOUSE [right] - big bullet\n";
 	
 	Uint64 last_tick = SDL_GetTicks();
@@ -129,20 +127,20 @@ int main() {
 		}
 
 		if (is_key_active(SDLK_W)) {
-			move_up(ship, movement_speed * delta_time);
-			move_up(reference_triangle, movement_speed * delta_time);
+			move_up(ship);
+			move_up(reference_triangle);
 		}
 		if (is_key_active(SDLK_A)) {
-			move_left(ship, movement_speed * delta_time);
-			move_left(reference_triangle, movement_speed * delta_time);
+			move_left(ship);
+			move_left(reference_triangle);
 		}
 		if (is_key_active(SDLK_S)) {
-			move_down(ship, movement_speed * delta_time);
-			move_down(reference_triangle, movement_speed * delta_time);
+			move_down(ship);
+			move_down(reference_triangle);
 		}
 		if (is_key_active(SDLK_D)) {
-			move_right(ship, movement_speed * delta_time);
-			move_right(reference_triangle, movement_speed * delta_time);
+			move_right(ship);
+			move_right(reference_triangle);
 		}
 		if (is_key_active(SDLK_Q)) {
 			quit = true;
@@ -180,9 +178,9 @@ int main() {
 	printf("ending program\n");
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	kill_font();
 	SDL_Quit();
 
+	kill_font();
 	free_all_bullets();
 
 	return 0;

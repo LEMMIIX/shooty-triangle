@@ -13,6 +13,9 @@ typedef struct bullet{
 	
 	float center_x;
 	float center_y;
+
+	float direction_vec_x;
+	float direction_vec_y;
 	
 	union {
 		SDL_Vertex vert;
@@ -26,9 +29,8 @@ struct bullets_manager {
 	Bullet* live_bullets[];
 };
 
-/** initilizes the bullets_manager
- */
 int bullets_manager_init();
+SDL_FPoint calc_bullet_turn_angle();
 
 /**
  * creates new bullet from Bullet_Type
