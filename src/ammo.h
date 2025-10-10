@@ -38,7 +38,7 @@ SDL_FPoint calc_bullet_turn_angle();
  * creates 1 heap allocated pointer, that MUST be free'd:
  * new_bullet
  */
-void create_bullet(float x, float y, Bullet_Type type);
+void create_bullet(Bullet_Type type);
 
 /**
  * updates bullet movement of all active bullets

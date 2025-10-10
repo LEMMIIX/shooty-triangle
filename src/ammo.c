@@ -36,7 +36,7 @@ int bullets_manager_init() {
 	return 0;
 }
 
-void create_bullet(float mouse_x, float mouse_y, Bullet_Type type) {
+void create_bullet(Bullet_Type type) {
 	if (BM == NULL) {
 		printf("NO BULLET MANAGER. No bullet was created.\n");
 		return;
@@ -54,13 +54,13 @@ void create_bullet(float mouse_x, float mouse_y, Bullet_Type type) {
 		new_bullet->shape.rect.h = Basic_shape.h;	
 		new_bullet->shape.rect.w = Basic_shape.w;	
 		new_bullet->shape.rect.x = player_pos.x - (Basic_shape.w / 2.0f);	
-		new_bullet->shape.rect.y = player_pos.y - (Basic_shape.y / 2.0f);	
+		new_bullet->shape.rect.y = player_pos.y - (Basic_shape.h / 2.0f);	
 
 	} else if (type == EXPLOSIVE) {
 		new_bullet->shape.rect.h = Expl_shape.h;	
 		new_bullet->shape.rect.w = Expl_shape.w;	
 		new_bullet->shape.rect.x = player_pos.x - (Expl_shape.w / 2.0f);	
-		new_bullet->shape.rect.y = player_pos.y - (Expl_shape.y / 2.0f);	
+		new_bullet->shape.rect.y = player_pos.y - (Expl_shape.h / 2.0f);	
 	}
 
 	// eventually use BM->last_freed_index to maybe optimize the free-space check

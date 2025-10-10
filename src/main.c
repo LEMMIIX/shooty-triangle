@@ -24,6 +24,29 @@
 #include "font_and_text.h"
 #include "ammo.h"
 
+static const char* signature = R"(
+                                                  
+                               ___      _⎽⎽⎼⎼⎼⎺⎺‾‾‾‾‾‾‾⎺⎺⎻⎻⎼⎼⎽⎽_
+                           _⎼⎺‾LCM‾\  /‾########################⎺⎺⎻⎻⎼⎼⎽⎽_
+                         /##########\|######## |    #####################‾\
+                        /######\#####\#########\_           ###############\
+                       |#######|######\___########\          #/#############|
+                        \##### | ##################\ _⎽⎽⎼⎼⎺⎺‾############### \
+          _-_-_         /####  \   ##############   |#####################   |
+          // // ‾⎺⎻(|)⎽⎽####  /\      ##########     /###################    |
+          \| \|  ‾⎺⎻⎻⎼⎼⎽     /   \                   /##################     |
+           _⎽⎽⎼⎼⎻    (O/    /     \                /################        /
+           ⎺⎻__ ⎽ _⎽⎽=⎻⎻⎺⎺‾        ⎺⎻⎻⎼⎼⎽⎽_⎽⎽⎼⎼⎼⎺⎺##############  _⎽⎽⎼⎼⎻⎻⎺⎺‾
+                                         /###############⎼⎼⎻⎻⎺⎺‾##‾⎺⎺⎻⎻⎼⎼_
+                                        |#################################‾‾⎺⎺⎻⎻⎼_
+                                         \######################################  \
+                                           \###############____⎽⎽⎼_     ########   |
+                                             ‾⎺⎺⎻⎻⎻⎻⎺⎺‾‾‾‾‾⎼⎼⎻⎻⎺⎺‾‾‾###########   /
+                                                         ⎺⎺⎺⎺⎺⎺⎺⎺‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+
+
+)";
+
 float delta_time = 0;
 
 SDL_Window* window = NULL;
@@ -119,10 +142,10 @@ int main() {
 				set_key_inactive(event.key.key);
 			} else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
 				SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y);
-				create_bullet(mouse_pos_x, mouse_pos_y, BASIC);
+				create_bullet(BASIC);
 			} else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_RIGHT) {
 				SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y);
-				create_bullet(mouse_pos_x, mouse_pos_y, EXPLOSIVE);
+				create_bullet(EXPLOSIVE);
 			}
 		}
 
