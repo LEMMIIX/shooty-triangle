@@ -6,7 +6,6 @@
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3/SDL_timer.h"
 #include "SDL3/SDL_video.h"
-#include "ammo.h"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <math.h>
@@ -23,6 +22,7 @@
 #include "player.h"
 #include "font_and_text.h"
 #include "ammo.h"
+#include "enemy.h"
 
 static const char* signature = R"(
                                                   
@@ -56,6 +56,8 @@ static bool vsync_enabled = 1;
 
 SDL_Vertex reference_triangle[3];
 
+#define ENEMY_SPAWN_INTERVAL 5.0f
+float enemy_timer = 0.0f;
 
 int main() {
 	// to correctly render UNICODE chars in the terminal on windows, mainly for the awesome signature
@@ -99,6 +101,12 @@ int main() {
 		printf("bullet manager not initialized\n");
 		return SDL_APP_FAILURE;
 	}
+	printf("got BM\n");
+	if (enemy_manager_init() != 0) {
+		printf("enemy manager not initialized\n");
+		return SDL_APP_FAILURE;
+	}
+	printf("got EM\n");
 
 	printf("creating ship\n");
 	SDL_Vertex ship[3];
@@ -188,7 +196,13 @@ int main() {
 		}
 		print_text_to_screen(frames_string, WINDOW_WIDTH / 2, 0, renderer);
 
+		if (enemy_timer >= ENEMY_SPAWN_INTERVAL) {
+			create_enemy();
+			enemy_timer = 0;
+		}
+
 		update_bullets();
+		update_enemies();
 
 		SDL_RenderPresent(renderer);
 
@@ -196,6 +210,8 @@ int main() {
 		// delta calculation
 		delta_time = (current_tick - last_delta_tick) / 1000.0f;
 		last_delta_tick = current_tick;
+
+		enemy_timer += delta_time;
 	}
 
 	printf("ending program\n");
@@ -205,6 +221,7 @@ int main() {
 
 	kill_font();
 	free_all_bullets();
+	free_all_enemies();
 
 	return 0;
 }

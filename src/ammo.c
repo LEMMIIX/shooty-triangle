@@ -85,7 +85,7 @@ SDL_FPoint calc_bullet_turn_angle() {
 }
 
 void update_bullets() {
-	unsigned int bs = 0;
+	//unsigned int bs = 0;
 	for (unsigned int i = 0; i < /*BM->size*/ MAX_BULLETS; ++i) {
 		if (BM->live_bullets[i] == NULL)  {
 			continue;
@@ -124,12 +124,14 @@ void update_bullets() {
 			}
 		}
 	}
+	/*
 	for (unsigned int i = 0; i < MAX_BULLETS; ++i) {
 		bs += BM->live_bullets[i] != NULL 
 			? 1
 			: 0;
 	}
 	printf("\33[2K\rbullets: %u", bs);
+	*/
 }
 
 int free_all_bullets() {
