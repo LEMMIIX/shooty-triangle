@@ -97,6 +97,7 @@ void update_bullets() {
 		 * of how the projectile is created, it would
 		 * be outside of the window sometimes. Might
 		 * have to come up with a better solution.
+		 * Maybe I could even use GetRenderViewportSize()
 		 */
 		Bullet* bullet = BM->live_bullets[i];
 		if (bullet->shape.rect.x < -20 ||

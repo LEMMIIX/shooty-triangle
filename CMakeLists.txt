@@ -9,6 +9,7 @@ add_executable(shooty_triangle
 	src/c_map.c
 	src/font_and_text.c
 	src/ammo.c
+	src/S_shapes.c
 	)
 
 find_package(SDL3 CONFIG REQUIRED)
