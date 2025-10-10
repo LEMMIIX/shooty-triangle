@@ -91,11 +91,18 @@ void update_bullets() {
 			continue;
 		}
 
+		/*
+		 * an offset is used on the border to prevent
+		 * the player not being able to shoot because
+		 * of how the projectile is created, it would
+		 * be outside of the window sometimes. Might
+		 * have to come up with a better solution.
+		 */
 		Bullet* bullet = BM->live_bullets[i];
-		if (bullet->shape.rect.x < 0 ||
-				bullet->shape.rect.x > WINDOW_WIDTH ||
-				bullet->shape.rect.y < 0 ||
-				bullet->shape.rect.y > WINDOW_HEIGHT) {
+		if (bullet->shape.rect.x < -20 ||
+				bullet->shape.rect.x > WINDOW_WIDTH + 20 ||
+				bullet->shape.rect.y < -20 ||
+				bullet->shape.rect.y >= WINDOW_HEIGHT + 20) {
 			free(BM->live_bullets[i]);
 			BM->live_bullets[i] = NULL;
 
