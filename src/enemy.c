@@ -7,11 +7,13 @@
 
 #include "enemy.h"
 #include "S_shapes.h"
+#include "ammo.h"
 #include "common.h"
 
 #define MAX_ENEMIES 128
 #define ENEMY_HEALTH 200
 #define ENEMY_SPEED 70
+#define MAX_BULLETS 128
 
 
 S_Hex Asteroid = {
@@ -99,14 +101,51 @@ SDL_FPoint calc_enemy_turn_angle(float x, float y) {
 	return direction;
 }
 
-void update_enemies() {
-	unsigned int es = 0;
+void update_enemies(struct bullets_manager* BM) {
+	//unsigned int es = 0;
+
+	//printf("gettin bullets manager for enemies\n");
+	//struct bullets_manager* BM = get_bullets_manager();
+	//printf("bulletsmanager filled: %d\n", BM != NULL);
+
 	for (unsigned int i = 0; i < MAX_ENEMIES; ++i) {
 		if (EM->live_enemies[i] == NULL) {
 			continue;
 		}
 
 		Enemy* enemy = EM->live_enemies[i];
+		bool enemy_destroyed = false;
+
+			// if hit by bullet, delete enemy
+		for(unsigned int k = 0; k < MAX_BULLETS; ++k) {
+			if (BM->live_bullets[k] == NULL) {
+				continue;
+			}
+
+			float distance = sqrtf(
+					powf(enemy->center_x - BM->live_bullets[k]->center_x, 2) + 
+					powf(enemy->center_y - BM->live_bullets[k]->center_y, 2)
+					);
+
+			if (distance <= enemy->shape.hex.radians) {
+				free(enemy);
+				EM->live_enemies[i] = NULL;
+				//printf("bullet %d distance: %f\n", i, distance);
+		
+				free(BM->live_bullets[k]);
+				BM->live_bullets[k] = NULL;
+
+				enemy_destroyed = true;
+				break;
+			}
+		}
+
+		// if enemy destroyed, skip to next enemy
+		if (enemy_destroyed) {
+			continue;
+		}
+
+		// if out of bounds, delete enemy
 		if (enemy->shape.hex.x < -200 ||
 				enemy->shape.hex.x > WINDOW_WIDTH + 200 ||
 				enemy->shape.hex.y < -200 ||
@@ -116,18 +155,20 @@ void update_enemies() {
 		} else {
 			enemy->shape.hex.x += enemy->direction_vec_x * ENEMY_SPEED * delta_time;
 			enemy->shape.hex.y += enemy->direction_vec_y * ENEMY_SPEED * delta_time;
+			enemy->center_x = enemy->shape.hex.x;
+			enemy->center_y = enemy->shape.hex.y;
 
 			SDL_SetRenderDrawColor(renderer, 255, 255, 17, 255);
 			S_RenderHex(renderer, &(enemy->shape.hex));
 		}
 	}
-	
+	/*
 	for (unsigned int i = 0; i < MAX_ENEMIES; ++i) {
-		es += EM->live_enemies[i] != NULL 
-			? 1
-			: 0;
+		es += EM->live_enemies[i] != NULL;
 	}
+
 	printf("\33[2K\renemies: %u", es);
+	*/
 }
 
 int free_all_enemies() {
@@ -137,10 +178,12 @@ int free_all_enemies() {
 		EM->live_enemies[i] = NULL;
 	}
 	for (unsigned int i = 0; i < MAX_ENEMIES; ++i) {
-		es += EM->live_enemies[i] != NULL 
-			? 1
-			: 0;
+		es += EM->live_enemies[i] != NULL;
 	}
+
+	free(EM);
+	EM = NULL;
+
 	printf("remaining dangling enemies: %u\n", es);
 	return 0;
 }

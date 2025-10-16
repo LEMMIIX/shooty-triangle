@@ -54,9 +54,11 @@ SDL_Renderer* renderer = NULL;
 
 static bool vsync_enabled = 1;
 
+struct bullets_manager* BM = NULL;
+
 SDL_Vertex reference_triangle[3];
 
-#define ENEMY_SPAWN_INTERVAL 5.0f
+#define ENEMY_SPAWN_INTERVAL 3.5f
 float enemy_timer = 0.0f;
 
 int main() {
@@ -198,11 +200,13 @@ int main() {
 
 		if (enemy_timer >= ENEMY_SPAWN_INTERVAL) {
 			create_enemy();
+			create_enemy();
+			create_enemy();
 			enemy_timer = 0;
 		}
 
 		update_bullets();
-		update_enemies();
+		update_enemies(BM);
 
 		SDL_RenderPresent(renderer);
 

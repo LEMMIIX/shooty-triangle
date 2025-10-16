@@ -4,6 +4,9 @@
 #include "SDL3/SDL_rect.h"
 #include "SDL3/SDL_render.h"
 #include "S_shapes.h"
+#include "ammo.h"
+
+extern struct bullets_manager* get_bullets_manager();
 
 typedef struct enemy {
 	float center_x;
@@ -38,7 +41,7 @@ void create_enemy();
  * updates enemy movement of all active enemies
  * also frees all inactive enemies, as mentioned in create_enemy
  */
-void update_enemies();
+void update_enemies(struct bullets_manager* bullets_manager);
 
 int free_all_enemies();
 

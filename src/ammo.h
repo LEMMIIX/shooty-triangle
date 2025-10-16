@@ -3,6 +3,7 @@
 
 #include "SDL3/SDL_rect.h"
 #include "SDL3/SDL_render.h"
+
 typedef enum bullet_type{
 	BASIC,
 	EXPLOSIVE,
@@ -47,5 +48,7 @@ void create_bullet(Bullet_Type type);
 void update_bullets();
 
 int free_all_bullets();
+
+struct bullets_manager* get_bullets_manager();
 
 #endif

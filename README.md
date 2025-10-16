@@ -39,3 +39,10 @@ create hostile elements<br>
 ![version5](resources/readme/ship_v5.gif)<br>
 Changes:
 * shoot projectiles towards mouse
+
+### Version 6:
+
+![version6](resources/readme/ship_v6.gif)<br>
+Changes:
+* add enemies that can be shot
+

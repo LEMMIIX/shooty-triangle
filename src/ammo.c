@@ -23,7 +23,7 @@ SDL_Rect Expl_shape = {
 		.y = 0.0f,
 };
 
-struct bullets_manager* BM = NULL;
+extern struct bullets_manager* BM;
 
 int bullets_manager_init() {
 	BM = malloc(sizeof(struct bullets_manager) + sizeof(Bullet*) * MAX_BULLETS);
@@ -55,12 +55,16 @@ void create_bullet(Bullet_Type type) {
 		new_bullet->shape.rect.w = Basic_shape.w;	
 		new_bullet->shape.rect.x = player_pos.x - (Basic_shape.w / 2.0f);	
 		new_bullet->shape.rect.y = player_pos.y - (Basic_shape.h / 2.0f);	
+		new_bullet->center_x = player_pos.x;
+		new_bullet->center_y = player_pos.y;
 
 	} else if (type == EXPLOSIVE) {
 		new_bullet->shape.rect.h = Expl_shape.h;	
 		new_bullet->shape.rect.w = Expl_shape.w;	
 		new_bullet->shape.rect.x = player_pos.x - (Expl_shape.w / 2.0f);	
 		new_bullet->shape.rect.y = player_pos.y - (Expl_shape.h / 2.0f);	
+		new_bullet->center_x = player_pos.x;
+		new_bullet->center_y = player_pos.y;
 	}
 
 	// eventually use BM->last_freed_index to maybe optimize the free-space check
@@ -111,6 +115,8 @@ void update_bullets() {
 			if (bullet->type == BASIC) {
 				bullet->shape.rect.x += bullet->direction_vec_x * MOVEMENT_SPEED * delta_time * 5.0f;
 				bullet->shape.rect.y += bullet->direction_vec_y * MOVEMENT_SPEED * delta_time * 5.0f;
+				bullet->center_x = bullet->shape.rect.x + (bullet->shape.rect.w / 2);
+				bullet->center_y = bullet->shape.rect.y - (bullet->shape.rect.h / 2);
 
 				SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 				SDL_RenderRect(renderer, &(bullet->shape.rect));
@@ -118,6 +124,8 @@ void update_bullets() {
 			} else if (bullet->type == EXPLOSIVE) {
 				bullet->shape.rect.x += bullet->direction_vec_x * MOVEMENT_SPEED * delta_time * 2.0f;
 				bullet->shape.rect.y += bullet->direction_vec_y * MOVEMENT_SPEED * delta_time * 2.0f;
+				bullet->center_x = bullet->shape.rect.x + (bullet->shape.rect.w / 2);
+				bullet->center_y = bullet->shape.rect.y - (bullet->shape.rect.h / 2);
 
 				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 				SDL_RenderRect(renderer, &(bullet->shape.rect));
@@ -126,9 +134,7 @@ void update_bullets() {
 	}
 	/*
 	for (unsigned int i = 0; i < MAX_BULLETS; ++i) {
-		bs += BM->live_bullets[i] != NULL 
-			? 1
-			: 0;
+		bs += BM->live_bullets[i] != NULL;
 	}
 	printf("\33[2K\rbullets: %u", bs);
 	*/
@@ -141,10 +147,17 @@ int free_all_bullets() {
 		BM->live_bullets[i] = NULL;
 	}
 	for (unsigned int i = 0; i < MAX_BULLETS; ++i) {
-		bs += BM->live_bullets[i] != NULL 
-			? 1
-			: 0;
+		bs += BM->live_bullets[i] != NULL;
 	}
+
+	free(BM);
+	BM = NULL;
+
 	printf("remaining dangling bullets: %u\n", bs);
 	return 0;
 }
+
+struct bullets_manager* get_bullets_manager() {
+	return BM;
+}
+
