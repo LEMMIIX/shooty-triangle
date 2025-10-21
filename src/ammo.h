@@ -4,6 +4,8 @@
 #include "SDL3/SDL_rect.h"
 #include "SDL3/SDL_render.h"
 
+#define MAX_BULLETS 128
+
 typedef enum bullet_type{
 	BASIC,
 	EXPLOSIVE,

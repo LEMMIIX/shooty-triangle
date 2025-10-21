@@ -18,4 +18,11 @@ SDL_Point get_player_pos();
 SDL_Point get_mouse_pos();
 float get_player_rot();
 
+typedef enum gamestate {
+	RUNNING,
+	PAUSED,
+	GAME_OVER,
+	QUIT,
+} Game_state;
+
 #endif

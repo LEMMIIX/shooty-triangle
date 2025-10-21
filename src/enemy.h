@@ -6,6 +6,8 @@
 #include "S_shapes.h"
 #include "ammo.h"
 
+#define MAX_ENEMIES 128
+
 extern struct bullets_manager* get_bullets_manager();
 
 typedef struct enemy {
@@ -44,5 +46,7 @@ void create_enemy();
 void update_enemies(struct bullets_manager* bullets_manager);
 
 int free_all_enemies();
+
+struct enemy_manager* get_enemy_manager();
 
 #endif

@@ -9,6 +9,14 @@ TTF_Font* Font;
 SDL_Color Font_color;
 SDL_Surface* Font_surface;
 SDL_FRect Font_rect;
+SDL_Texture* Font_texture;
+
+SDL_Color default_color = {
+	.r = 255,
+	.g = 255,
+	.b = 255,
+	.a = 255
+};
 
 #define FONT_SIZE 12
 // eventually create a byte array to embedd the font into the binaries
@@ -29,10 +37,24 @@ bool font_init() {
 	}
 }
 
+void print_text_to_screen_with_color(const char* string, int x, int y, SDL_Renderer* renderer, SDL_Color color) {
+	Font_surface = TTF_RenderText_Solid_Wrapped(Font, string, 0, color, 0);
+
+	Font_texture = SDL_CreateTextureFromSurface(renderer, Font_surface);
+
+	Font_rect.x = x;
+	Font_rect.y = y;
+	Font_rect.h = Font_surface->h;
+	Font_rect.w = Font_surface->w;
+
+	SDL_RenderTexture(renderer, Font_texture, NULL, &Font_rect);
+	SDL_DestroySurface(Font_surface);
+	SDL_DestroyTexture(Font_texture);
+}
 void print_text_to_screen(const char* string, int x, int y, SDL_Renderer* renderer) {
 	Font_surface = TTF_RenderText_Solid_Wrapped(Font, string, 0, Font_color, 0);
 
-	SDL_Texture* Font_texture = SDL_CreateTextureFromSurface(renderer, Font_surface);
+	Font_texture = SDL_CreateTextureFromSurface(renderer, Font_surface);
 
 	Font_rect.x = x;
 	Font_rect.y = y;

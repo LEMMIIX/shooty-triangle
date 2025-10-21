@@ -21,6 +21,9 @@ void move_right(SDL_Vertex* obj);
 void set_key_active(unsigned int);
 void set_key_inactive(unsigned int);
 bool is_key_active(unsigned int);
+void flush_keystate();
+void flush_mousepos();
+void flush_playerpos();
 
 
 #endif

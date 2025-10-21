@@ -7,7 +7,6 @@
 #include "ammo.h"
 #include "common.h"
 
-#define MAX_BULLETS 128
 
 SDL_Rect Basic_shape = {
 		.h = 15.0f,
@@ -113,8 +112,8 @@ void update_bullets() {
 
 		} else {
 			if (bullet->type == BASIC) {
-				bullet->shape.rect.x += bullet->direction_vec_x * MOVEMENT_SPEED * delta_time * 5.0f;
-				bullet->shape.rect.y += bullet->direction_vec_y * MOVEMENT_SPEED * delta_time * 5.0f;
+				bullet->shape.rect.x += bullet->direction_vec_x * MOVEMENT_SPEED * delta_time * 2.0f;
+				bullet->shape.rect.y += bullet->direction_vec_y * MOVEMENT_SPEED * delta_time * 2.0f;
 				bullet->center_x = bullet->shape.rect.x + (bullet->shape.rect.w / 2);
 				bullet->center_y = bullet->shape.rect.y - (bullet->shape.rect.h / 2);
 
@@ -122,8 +121,8 @@ void update_bullets() {
 				SDL_RenderRect(renderer, &(bullet->shape.rect));
 
 			} else if (bullet->type == EXPLOSIVE) {
-				bullet->shape.rect.x += bullet->direction_vec_x * MOVEMENT_SPEED * delta_time * 2.0f;
-				bullet->shape.rect.y += bullet->direction_vec_y * MOVEMENT_SPEED * delta_time * 2.0f;
+				bullet->shape.rect.x += bullet->direction_vec_x * MOVEMENT_SPEED * delta_time;
+				bullet->shape.rect.y += bullet->direction_vec_y * MOVEMENT_SPEED * delta_time;
 				bullet->center_x = bullet->shape.rect.x + (bullet->shape.rect.w / 2);
 				bullet->center_y = bullet->shape.rect.y - (bullet->shape.rect.h / 2);
 

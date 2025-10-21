@@ -10,19 +10,17 @@
 #include "ammo.h"
 #include "common.h"
 
-#define MAX_ENEMIES 128
 #define ENEMY_HEALTH 200
 #define ENEMY_SPEED 70
-#define MAX_BULLETS 128
 
 
 S_Hex Asteroid = {
-	.radians = 50,
+	.radians = 30,
 	.x = 0.0f,
 	.y = 0.0f
 };
 
-struct enemy_manager* EM = NULL;
+extern struct enemy_manager* EM;
 
 int enemy_manager_init() {
 	srand(time(NULL));
@@ -127,7 +125,7 @@ void update_enemies(struct bullets_manager* BM) {
 					powf(enemy->center_y - BM->live_bullets[k]->center_y, 2)
 					);
 
-			if (distance <= enemy->shape.hex.radians) {
+			if (distance <= enemy->shape.hex.radians + 5) {
 				free(enemy);
 				EM->live_enemies[i] = NULL;
 				//printf("bullet %d distance: %f\n", i, distance);
@@ -186,4 +184,8 @@ int free_all_enemies() {
 
 	printf("remaining dangling enemies: %u\n", es);
 	return 0;
+}
+
+struct enemy_manager* get_enemy_manager() {
+	return EM;
 }

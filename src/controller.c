@@ -1,5 +1,5 @@
 #include <math.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include "SDL3/SDL_rect.h"
 
 #include "SDL3/SDL_render.h"
@@ -24,11 +24,11 @@ float Mouse_y = WINDOW_HEIGHT / 2.0f;
 float Player_rotation_angle = 0.0f;
 
 void turn_the_thing(float* mouse_x, float* mouse_y, SDL_Vertex *obj) {
-	mouse_x = mouse_x;
-	mouse_y = mouse_y;
+	Mouse_x = *mouse_x;
+	Mouse_y = *mouse_y;
 
-	float vector_x = *mouse_x - Center_x;
-	float vector_y = *mouse_y - Center_y;
+	float vector_x = Mouse_x - Center_x;
+	float vector_y = Mouse_y - Center_y;
 
 	Player_rotation_angle = atan2f(vector_y, vector_x);
 	//printf("\rrotation_angle = %f radians (%f degrees)", Player_rotation_angle, Player_rotation_angle * 180.0f / M_PI);
@@ -134,3 +134,18 @@ SDL_Point get_mouse_pos() {
 float get_player_rot() {
 	return Player_rotation_angle;
 }
+
+void flush_keystate() {
+	for (unsigned int i = 0; i < 5; ++i) {
+		key_state[i].active = false;
+	}
+}
+
+void flush_mousepos() {
+	Mouse_x = WINDOW_WIDTH / 2.0f;
+	Mouse_y = WINDOW_HEIGHT / 2.0f;
+}
+ void flush_playerpos() {
+	Center_x = WINDOW_WIDTH / 2.0f;;
+	Center_y = WINDOW_HEIGHT / 2.0f;;
+ }
