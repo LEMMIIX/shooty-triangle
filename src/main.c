@@ -58,12 +58,12 @@ static bool vsync_enabled = 1;
 struct bullets_manager* BM = NULL;
 struct enemy_manager* EM = NULL;
 
-SDL_Vertex reference_triangle[3];
-
 #define ENEMY_SPAWN_INTERVAL 1.0f
 float enemy_timer = 0.0f;
 
 Game_state game_state;
+
+Player_ship ship;
 
 int main() {
 	// to correctly render UNICODE chars in the terminal on windows, mainly for the awesome signature
@@ -81,52 +81,28 @@ int main() {
 		printf("hello video\n");
 	}
 
-	// TODO split up into CreateWindow and CreateRenderer to provide SDL_RendererFlags
 	if (!SDL_CreateWindowAndRenderer("shooty triangle", WINDOW_WIDTH, WINDOW_HEIGHT,
 				SDL_WINDOW_ALWAYS_ON_TOP,
-				&window, &renderer)) {
-		printf("sdl window and renderer creation failed, error: %s", SDL_GetError());
+				&window, &renderer)
+			|| !SDL_SetRenderVSync(renderer, vsync_enabled)
+			|| !font_init()
+			|| bullets_manager_init() != 0
+			|| enemy_manager_init() != 0) {
+		printf("INITIALIZATION FAILED. Stopping program.\n");
 		return SDL_APP_FAILURE;
 	} else {
-		printf("hello window and renderer\n");
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderClear(renderer);
+
+		game_state = RUNNING;
 	}
 
-	if (!SDL_SetRenderVSync(renderer, vsync_enabled)) {
-		printf("VSync could not be enabled, error: %s", SDL_GetError());
-		return SDL_APP_FAILURE;
-	}
+	create_player(&ship);
 
-	if (!font_init()) {
-		printf("font %s not found\n", FONT);
-		return SDL_APP_FAILURE;
-	} else {
-		printf("using font: %s\n", FONT);
-	}
-
-	if (bullets_manager_init() != 0) {
-		printf("bullet manager not initialized\n");
-		return SDL_APP_FAILURE;
-	}
-	printf("got BM\n");
-	if (enemy_manager_init() != 0) {
-		printf("enemy manager not initialized\n");
-		return SDL_APP_FAILURE;
-	}
-	printf("got EM\n");
-
-	printf("creating ship\n");
-	SDL_Vertex ship[3];
-	create_player(ship);
-
-	create_player(reference_triangle);
-
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderClear(renderer);
-
-	printf("starting game loop\n");
 	float mouse_pos_x;
 	float mouse_pos_y;
 
+	// dont know how to do this better.
 	const char* controls ="ESC - (un-)pause\nQ - quit\nW - move UP\nA - move LEFT\nS - move DOWN\nD - move RIGHT\nMOUSE - rotate\nMOUSE [left] - small bullet\nMOUSE [right] - big bullet\n";
 	const char* controls_esc = "ESC - (un-)pause\n";
 	const char* paused_text = "G A M E  P A U S E D";
@@ -144,12 +120,9 @@ int main() {
 	Uint64 current_tick;
 	float frames_per_second = 0.0f;
 	char frames_string[100] = "0.000";
-
 	Uint64 last_delta_tick = SDL_GetTicks();
 
-	// TODO refactor to return running only when init of screen etc ist successful
-	game_state = RUNNING;
-
+	printf("starting game loop\n");
 	SDL_Event event;
 	while(game_state != QUIT) {
 		if (game_state == RUNNING) {
@@ -163,7 +136,7 @@ int main() {
 
 				} else if (event.type == SDL_EVENT_MOUSE_MOTION) {
 					SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y);
-					turn_the_thing(&mouse_pos_x, &mouse_pos_y, ship);
+					turn_the_thing(&mouse_pos_x, &mouse_pos_y);
 
 				} else if (event.type == SDL_EVENT_KEY_DOWN) {
 					set_key_active(event.key.key);
@@ -180,20 +153,16 @@ int main() {
 			}
 
 			if (is_key_active(SDLK_W)) {
-				move_up(ship);
-				move_up(reference_triangle);
+				move_ship_up();
 			}
 			if (is_key_active(SDLK_A)) {
-				move_left(ship);
-				move_left(reference_triangle);
+				move_ship_left();
 			}
 			if (is_key_active(SDLK_S)) {
-				move_down(ship);
-				move_down(reference_triangle);
+				move_ship_down();
 			}
 			if (is_key_active(SDLK_D)) {
-				move_right(ship);
-				move_right(reference_triangle);
+				move_ship_right();
 			}
 			if (is_key_active(SDLK_Q)) {
 				game_state = QUIT;
@@ -202,7 +171,7 @@ int main() {
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			SDL_RenderClear(renderer);
 
-			SDL_RenderGeometry(renderer, NULL, ship, 3, NULL, 0);
+			SDL_RenderGeometry(renderer, NULL, ship.shape, 3, NULL, 0);
 
 			//fps count
 			++frame_count;
@@ -253,7 +222,7 @@ int main() {
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			SDL_RenderClear(renderer);
 
-			SDL_RenderGeometry(renderer, NULL, ship, 3, NULL, 0);
+			SDL_RenderGeometry(renderer, NULL, ship.shape, 3, NULL, 0);
 
 			print_text_to_screen_with_color(paused_text, ((WINDOW_WIDTH / 2.0f) - 60), WINDOW_HEIGHT / 2.0f, renderer, paused_color);
 			print_text_to_screen(controls, 0, 0, renderer);
@@ -274,15 +243,12 @@ int main() {
 						printf("bullet manager not initialized\n");
 						return SDL_APP_FAILURE;
 					}
-					printf("got BM\n");
 					if (enemy_manager_init() != 0) {
 						printf("enemy manager not initialized\n");
 						return SDL_APP_FAILURE;
 					}
-					printf("got EM\n");
 
-					create_player(ship);
-					create_player(reference_triangle);
+					create_player(&ship);
 
 					flush_keystate();
 					flush_mousepos();

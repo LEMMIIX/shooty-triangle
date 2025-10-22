@@ -5,7 +5,13 @@
 
 extern struct enemy_manager* get_enemy_manager();
 
-void create_player(SDL_Vertex triangle[]);
+typedef struct player_ship {
+	SDL_Vertex shape[3];
+	SDL_Vertex reference_shape[3];
+	int health;
+} Player_ship;
+
+void create_player(Player_ship* player);
 bool got_hit_by_enemy(struct enemy_manager* EM);
 
 #endif

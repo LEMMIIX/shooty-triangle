@@ -5,18 +5,18 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_render.h"
 #include "c_map.h"
+#include "player.h"
 
 extern struct map_uint_bool key_state[];
 extern float Center_x;
 extern float Center_y;
 
-void turn_the_thing(float* x, float* y, SDL_Vertex obj[]);
-float move_the_thing(SDL_Event event, SDL_Vertex obj[]);
+void turn_the_thing(float* x, float* y);
 
-void move_up(SDL_Vertex* obj);
-void move_left(SDL_Vertex* obj);
-void move_down(SDL_Vertex* obj);
-void move_right(SDL_Vertex* obj);
+void move_ship_up();
+void move_ship_left();
+void move_ship_down();
+void move_ship_right();
 
 void set_key_active(unsigned int);
 void set_key_inactive(unsigned int);

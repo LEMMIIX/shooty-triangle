@@ -12,7 +12,6 @@
 extern float delta_time;
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
-extern SDL_Vertex reference_triangle[];
 
 SDL_Point get_player_pos();
 SDL_Point get_mouse_pos();

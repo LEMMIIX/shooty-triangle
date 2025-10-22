@@ -102,10 +102,6 @@ SDL_FPoint calc_enemy_turn_angle(float x, float y) {
 void update_enemies(struct bullets_manager* BM) {
 	//unsigned int es = 0;
 
-	//printf("gettin bullets manager for enemies\n");
-	//struct bullets_manager* BM = get_bullets_manager();
-	//printf("bulletsmanager filled: %d\n", BM != NULL);
-
 	for (unsigned int i = 0; i < MAX_ENEMIES; ++i) {
 		if (EM->live_enemies[i] == NULL) {
 			continue;
