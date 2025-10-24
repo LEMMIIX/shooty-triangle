@@ -114,6 +114,7 @@ int main() {
 	};
 	const char* gameover_text = "G A M E  O V E R";
 	const char* gameover_controls = "R - restart\nQ - quit\n";
+	char score_string[12];
 
 	Uint64 last_tick = SDL_GetTicks();
 	Uint64 frame_count = 0;
@@ -185,6 +186,8 @@ int main() {
 			}
 			print_text_to_screen(frames_string, WINDOW_WIDTH / 2, 0, renderer);
 			print_text_to_screen(controls_esc, 0, 0, renderer);
+			snprintf(score_string, 12, "score: %d", ship.score);
+			print_text_to_screen(score_string, WINDOW_WIDTH - 100, 0, renderer);
 
 			if (enemy_timer >= ENEMY_SPAWN_INTERVAL) {
 				create_enemy();
@@ -263,7 +266,8 @@ int main() {
 			SDL_RenderClear(renderer);
 
 			print_text_to_screen_with_color(gameover_text, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2, renderer, paused_color);
-			print_text_to_screen(gameover_controls, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 + 20, renderer);
+			print_text_to_screen(score_string, WINDOW_WIDTH / 2 -  60, WINDOW_HEIGHT / 2 + 20, renderer);
+			print_text_to_screen(gameover_controls, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 + 40, renderer);
 
 			SDL_RenderPresent(renderer);
 		}

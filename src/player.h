@@ -9,6 +9,7 @@ typedef struct player_ship {
 	SDL_Vertex shape[3];
 	SDL_Vertex reference_shape[3];
 	int health;
+	int score;
 } Player_ship;
 
 void create_player(Player_ship* player);

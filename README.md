@@ -4,6 +4,12 @@ it be a triang that shoot
 
 ## Showcase 
 
+### Version 8:
+
+![version8](resources/readme/ship_v8.gif)<br>
+Changes:
+* add score counter that adds points if hit enemy, or subtracts if missed enemy
+
 ### Version 7:
 
 ![version7](resources/readme/ship_v7.gif)<br>

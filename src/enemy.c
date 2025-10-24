@@ -9,6 +9,7 @@
 #include "S_shapes.h"
 #include "ammo.h"
 #include "common.h"
+#include "player.h"
 
 #define ENEMY_HEALTH 200
 #define ENEMY_SPEED 70
@@ -21,6 +22,7 @@ S_Hex Asteroid = {
 };
 
 extern struct enemy_manager* EM;
+extern Player_ship ship;
 
 int enemy_manager_init() {
 	srand(time(NULL));
@@ -70,7 +72,17 @@ void create_enemy() {
 	new_enemy->shape.hex.x = new_enemy->center_x;
 	new_enemy->shape.hex.y = new_enemy->center_y;
 
-	SDL_FPoint direction_vec = calc_enemy_turn_angle(new_enemy->center_x, new_enemy->center_y);
+	// randomly add or subtract a value to the enemy coordinates
+	// to make movement direction more random. Theres no particular
+	// reason why `%220` is uses in rand_value, it just worked 
+	// pretty nicely as an offset. Reducing this number will target
+	// the player more closely
+#define RAND_ADD_OR_SUBTRACT(coord, val) ((rand() %100) %2 == 0 \
+		? coord + val \
+		: coord - val)
+	int rand_value = rand() %220;
+	SDL_FPoint direction_vec = calc_enemy_turn_angle(RAND_ADD_OR_SUBTRACT(new_enemy->center_x, rand_value),
+			RAND_ADD_OR_SUBTRACT(new_enemy->center_y, rand_value));
 	new_enemy->direction_vec_x = direction_vec.x;
 	new_enemy->direction_vec_y = direction_vec.y;
 
@@ -134,8 +146,9 @@ void update_enemies(struct bullets_manager* BM) {
 			}
 		}
 
-		// if enemy destroyed, skip to next enemy
+		// if enemy destroyed, skip to next enemy and increase player score
 		if (enemy_destroyed) {
+			ship.score += 100;
 			continue;
 		}
 

@@ -59,6 +59,7 @@ void create_player(Player_ship* player) {
 
 
 	player->health = 100;
+	player->score = 0;
 }
 
 bool got_hit_by_enemy(struct enemy_manager* EM) {

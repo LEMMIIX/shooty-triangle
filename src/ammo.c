@@ -6,6 +6,7 @@
 
 #include "ammo.h"
 #include "common.h"
+#include "player.h"
 
 
 SDL_Rect Basic_shape = {
@@ -23,6 +24,7 @@ SDL_Rect Expl_shape = {
 };
 
 extern struct bullets_manager* BM;
+extern  Player_ship ship;
 
 int bullets_manager_init() {
 	BM = malloc(sizeof(struct bullets_manager) + sizeof(Bullet*) * MAX_BULLETS);
@@ -109,6 +111,7 @@ void update_bullets() {
 				bullet->shape.rect.y >= WINDOW_HEIGHT + 20) {
 			free(BM->live_bullets[i]);
 			BM->live_bullets[i] = NULL;
+			ship.score -= 50;
 
 		} else {
 			if (bullet->type == BASIC) {
