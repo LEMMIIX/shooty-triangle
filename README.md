@@ -2,6 +2,8 @@
 
 it be a triang that shoot
 
+[![wiki][wiki_img]][wiki_link] <b>Check out [the wiki of this repo][wiki_link] if you are looking to learn from this project!</b>
+
 ## Showcase 
 
 ### Version 8:
@@ -56,3 +58,10 @@ Changes:
 
 ![version1](resources/readme/ship_v1.gif)<br>
 
+
+
+[wiki_img]:
+https://upload.wikimedia.org/wikipedia/commons/2/2c/Tango_style_Wikipedia_Icon.svg
+
+[wiki_link]:
+https://github.com/LEMMIIX/shooty-triangle/wiki
