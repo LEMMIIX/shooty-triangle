@@ -11,6 +11,7 @@ it be a triang that shoot
 ![version8](resources/readme/ship_v8.gif)<br>
 Changes:
 * add score counter that adds points if hit enemy, or subtracts if missed enemy
+* add small randomization to enemy direction
 
 ### Version 7:
 
