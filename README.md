@@ -4,6 +4,11 @@ it be a triang that shoot
 
 [![wiki][wiki_img]][wiki_link] <b>Check out [the wiki of this repo][wiki_link] if you are looking to learn from this project!</b>
 
+Wiki completion:<br>
+- [ ] code doc
+- [ ] architecture doc
+
+
 ## Showcase 
 
 ### Version 8:
@@ -24,15 +29,12 @@ Changes:
 ![version6](resources/readme/ship_v6.gif)<br>
 Changes:
 * add enemies that can be shot
-Objective:<br>
-make projectiles shoot from the player towards mouse position,<br>
-create hostile elements<br>
 
 ### Version 5:
 
 ![version5](resources/readme/ship_v5.gif)<br>
 Changes:
-* shoot projectiles towards mouse
+* shoot projectiles in player facing direction
 
 ### Version 4:
 
